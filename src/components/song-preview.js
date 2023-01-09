@@ -11,7 +11,8 @@ AFRAME.registerComponent('song-preview-system', {
     debug: {default: false},
     isSearching: {default: false},
     isSongLoading: {default: false},  // Continue to play preview song during loading.
-    selectedChallengeId: {type: 'string'}
+    selectedChallengeId: {type: 'string'},
+    songUrl: {type: 'string'}
   },
 
   init: function () {
@@ -91,7 +92,7 @@ AFRAME.registerComponent('song-preview-system', {
 
     // Preload.
     this.audioStore[data.selectedChallengeId].src =
-      utils.getS3FileUrl(data.selectedChallengeId, 'song.ogg');
+      data.songUrl;
 
     // Remove from preload queue.
     for (let i = 0; i < preloadQueue.length; i++) {
@@ -106,7 +107,7 @@ AFRAME.registerComponent('song-preview-system', {
    * Create an audio element and queue to preload. If the queue is empty, preload it
    * immediately.
    */
-  queuePreloadSong: function (challengeId, previewStartTime) {
+  queuePreloadSong: function (challengeId, previewStartTime, songUrl) {
     if (this.audioStore[challengeId]) { return; }
 
     const audio = document.createElement('audio');
@@ -114,7 +115,7 @@ AFRAME.registerComponent('song-preview-system', {
     audio.dataset.previewStartTime = previewStartTime;
     this.audioStore[challengeId] = audio;
 
-    let src = utils.getS3FileUrl(challengeId, 'song.ogg');
+    let src = songUrl;
     if (this.currentLoadingId) {
       // Audio currently loading, add to queue.
       this.preloadQueue.push({
@@ -183,7 +184,7 @@ AFRAME.registerComponent('song-preview-system', {
 
     // Prefetch buffer for playing.
     if (audioanalyser.xhr) { audioanalyser.xhr.abort(); }
-    audioanalyser.fetchAudioBuffer(utils.getS3FileUrl(challengeId, 'song.ogg'));
+    audioanalyser.fetchAudioBuffer(data.songUrl);
   },
 
   /**
@@ -221,7 +222,7 @@ AFRAME.registerComponent('song-preview', {
     }
 
     this.el.sceneEl.components['song-preview-system'].queuePreloadSong(
-      this.data.challengeId, this.data.previewStartTime
+      this.data.challengeId, this.data.previewStartTime, this.data.songUrl
     );
   }
 });

@@ -1,5 +1,12 @@
 var algoliasearch = require('algoliasearch/lite');
 var bindEvent = require('aframe-event-decorators').bindEvent;
+var _ = require('lodash');
+const BeatSaverAPI = require('beatsaver-api');
+const api = new BeatSaverAPI({
+  AppName: 'Application Name',
+  Version: '1.0.0'
+});
+const zip = require("@zip.js/zip.js/dist/zip");
 
 var client = algoliasearch('QULTOY3ZWU', 'be07164192471df7e97e6fa70c1d041d');
 var algolia = client.initIndex('supersaber');
@@ -30,6 +37,7 @@ AFRAME.registerComponent('search', {
 
   search: function (query) {
     // Use cached for popular hits.
+    console.log(query);
     if (!query && this.popularHits) {
       this.eventDetail.results = this.popularHits;
       this.eventDetail.query = '';
@@ -39,18 +47,52 @@ AFRAME.registerComponent('search', {
 
     this.eventDetail.query = query;
     this.queryObject.query = query;
-    algolia.search(this.queryObject, (err, content) => {
-      // Cache popular hits.
-      if (err) {
-        this.el.sceneEl.emit('searcherror', null, false);
-        console.error(err);
-        return;
-      }
+    api.searchMaps({q:query}).then((results)=>{
+      console.log(results);
+      Promise.all(_.map(results.docs, async (result) => {
+        let zipBlob = await fetch(result.versions[0].downloadURL).then(r => r.blob());
+        const zipFileReader = new zip.BlobReader(zipBlob);
+        const zipReader = new zip.ZipReader(zipFileReader);
+        const files = await zipReader.getEntries();
+        const info = _.find(files, {filename: "Info.dat"});
+        //const infoStream = new TransformStream();
+        //const infoPromise = new Response(infoStream.readable).text();
+        const infoBlob = await info.getData(new zip.BlobWriter());
+        const infoJson = JSON.parse(await infoBlob.text());
+        console.log(infoJson);
+        const songFile = _.find(files, {filename: infoJson._songFilename});
+        const songBlob = await songFile.getData(new zip.BlobWriter());
+        const songUrl = URL.createObjectURL(songBlob);
+        console.log(songUrl);
 
-      if (!query) { this.popularHits = content.hits; }
-      this.eventDetail.results = content.hits;
-      this.el.sceneEl.emit('searchresults', this.eventDetail);
-    });
+        return {
+          songName: result.metadata.songName,
+          songSubName: result.metadata.songAuthorName,
+          imageUrl: result.versions[0].coverURL,
+          songUrl: songUrl,
+          id: result.id,
+          data: result,
+          difficulties: _.map(infoJson._difficultyBeatmapSets[0]._difficultyBeatmaps, '_difficulty'),
+          numBeats: result.metadata.duration,
+        }
+      })).then((tmpResults) => {
+        this.eventDetail.results = tmpResults;
+        console.log(tmpResults);
+        this.el.sceneEl.emit('searchresults', this.eventDetail);
+      });
+    })
+    // algolia.search(this.queryObject, (err, content) => {
+    //   // Cache popular hits.
+    //   if (err) {
+    //     this.el.sceneEl.emit('searcherror', null, false);
+    //     console.error(err);
+    //     return;
+    //   }
+
+    //   if (!query) { this.popularHits = content.hits; }
+    //   this.eventDetail.results = content.hits;
+    //   this.el.sceneEl.emit('searchresults', this.eventDetail);
+    // });
   }
 });
 

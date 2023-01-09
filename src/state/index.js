@@ -328,6 +328,7 @@ AFRAME.registerState({
     menuchallengeselect: (state, id) => {
       // Copy from challenge store populated from search results.
       let challenge = challengeDataStore[id];
+      console.log("challenge store", challengeDataStore);
       Object.assign(state.menuSelectedChallenge, challenge);
 
       // Populate difficulty options.
@@ -340,7 +341,7 @@ AFRAME.registerState({
       // Default to easiest difficulty.
       state.menuSelectedChallenge.difficulty = state.menuDifficulties[0];
 
-      state.menuSelectedChallenge.image = utils.getS3FileUrl(id, 'image.jpg');
+      state.menuSelectedChallenge.image = challenge.imageUrl;
       updateMenuSongInfo(state, challenge);
 
       computeMenuSelectedChallengeIndex(state);

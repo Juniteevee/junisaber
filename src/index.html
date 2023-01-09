@@ -35,7 +35,7 @@
       bind__intro-song="isPlaying: menuActive && !menuSelectedChallenge.id; isSearching: isSearching"
       bind__leaderboard="isVictory: isVictory; menuSelectedChallengeId: menuSelectedChallenge.id; challengeId: challenge.id"
       bind__song="challengeId: challenge.id; isPlaying: isPlaying; isBeatsPreloaded: challenge.isBeatsPreloaded; isGameOver: isGameOver; isVictory: isVictory"
-      bind__song-preview-system="challengeId: challenge.id; isSearching: isSearching; isSongLoading: isSongLoading; selectedChallengeId: menuSelectedChallenge.id"
+      bind__song-preview-system="challengeId: challenge.id; isSearching: isSearching; isSongLoading: isSongLoading; selectedChallengeId: menuSelectedChallenge.id; songUrl: menuSelectedChallenge.songUrl"
       animation__gameover="property: object3D.background; type: color; to: #750000; startEvents: gameover"
       console-shortcuts
       debug-beat-loader

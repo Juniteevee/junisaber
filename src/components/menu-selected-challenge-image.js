@@ -10,6 +10,6 @@ AFRAME.registerComponent('menu-selected-challenge-image', {
     if (!this.data.selectedChallengeId) { return; }
     el.setAttribute(
       'material', 'src',
-      utils.getS3FileUrl(this.data.selectedChallengeId, 'image.jpg'));
+      this.data.selectedChallengeId);
   }
 });
