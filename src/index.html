@@ -30,11 +30,11 @@
 
     <a-scene
       mixin="gameoverAnimation bgColorAnimation tunnelColorAnimation leftLaserColorAnimation rightLaserColorAnimation textGlowColorAnimation floorColorAnimation"
-      bind__beat-loader="challengeId: challenge.id; difficulty: menuSelectedChallenge.difficulty; isPlaying: isPlaying; menuSelectedChallengeId: menuSelectedChallenge.id"
+      bind__beat-loader="challengeId: challenge.id; difficulty: menuSelectedChallenge.difficulty; isPlaying: isPlaying; menuSelectedChallengeId: menuSelectedChallenge.id; difficultyFiles: menuSelectedChallenge.difficultyFiles"
       bind__gameover="isGameOver: isGameOver"
       bind__intro-song="isPlaying: menuActive && !menuSelectedChallenge.id; isSearching: isSearching"
       bind__leaderboard="isVictory: isVictory; menuSelectedChallengeId: menuSelectedChallenge.id; challengeId: challenge.id"
-      bind__song="challengeId: challenge.id; isPlaying: isPlaying; isBeatsPreloaded: challenge.isBeatsPreloaded; isGameOver: isGameOver; isVictory: isVictory"
+      bind__song="challengeId: challenge.id; isPlaying: isPlaying; isBeatsPreloaded: challenge.isBeatsPreloaded; isGameOver: isGameOver; isVictory: isVictory; songUrl: menuSelectedChallenge.songUrl"
       bind__song-preview-system="challengeId: challenge.id; isSearching: isSearching; isSongLoading: isSongLoading; selectedChallengeId: menuSelectedChallenge.id; songUrl: menuSelectedChallenge.songUrl"
       animation__gameover="property: object3D.background; type: color; to: #750000; startEvents: gameover"
       console-shortcuts

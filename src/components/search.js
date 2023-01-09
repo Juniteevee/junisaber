@@ -64,16 +64,28 @@ AFRAME.registerComponent('search', {
         const songBlob = await songFile.getData(new zip.BlobWriter());
         const songUrl = URL.createObjectURL(songBlob);
         console.log(songUrl);
-
+        const coverFile = _.find(files, {filename: infoJson._coverImageFilename});
+        const coverBlob = await coverFile.getData(new zip.BlobWriter());
+        const coverUrl = URL.createObjectURL(coverBlob);
+        const difficultyInfo = infoJson._difficultyBeatmapSets[0]._difficultyBeatmaps;
+        const difficultyFiles = {};
+        difficultyInfo.forEach(async (d) => {
+          const file = _.find(files, {filename: d._beatmapFilename});
+          const fileBlob = await file.getData(new zip.BlobWriter());
+          const fileJson = JSON.parse(await fileBlob.text());
+          fileJson._beatsPerMinute = infoJson._beatsPerMinute;
+          difficultyFiles[d._difficulty] = fileJson;
+        });
         return {
           songName: result.metadata.songName,
           songSubName: result.metadata.songAuthorName,
-          imageUrl: result.versions[0].coverURL,
+          imageUrl: coverUrl,
           songUrl: songUrl,
           id: result.id,
           data: result,
-          difficulties: _.map(infoJson._difficultyBeatmapSets[0]._difficultyBeatmaps, '_difficulty'),
+          difficulties: _.map(difficultyInfo, '_difficulty'),
           numBeats: result.metadata.duration,
+          difficultyFiles: difficultyFiles,
         }
       })).then((tmpResults) => {
         this.eventDetail.results = tmpResults;

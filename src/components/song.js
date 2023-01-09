@@ -31,7 +31,8 @@ AFRAME.registerComponent('song', {
     isBeatsPreloaded: {default: false},
     isGameOver: {default: false},
     isPlaying: {default: false},
-    isVictory: {default: false}
+    isVictory: {default: false},
+    songUrl: {type: 'string'}
   },
 
   init: function () {
@@ -126,7 +127,9 @@ AFRAME.registerComponent('song', {
         this.source = evt.detail;
         resolve(this.source);
       }, ONCE);
-      this.analyserSetter.src = utils.getS3FileUrl(data.challengeId, 'song.ogg');
+      // this.analyserSetter.src = utils.getS3FileUrl(data.challengeId, 'song.ogg');
+      this.analyserSetter.src = this.data.songUrl;
+
       data.analyserEl.setAttribute('audioanalyser', this.analyserSetter);
 
       // Already loaded.

@@ -184,7 +184,7 @@ AFRAME.registerComponent('song-preview-system', {
 
     // Prefetch buffer for playing.
     if (audioanalyser.xhr) { audioanalyser.xhr.abort(); }
-    audioanalyser.fetchAudioBuffer(data.songUrl);
+    audioanalyser.fetchAudioBuffer(this.data.songUrl);
   },
 
   /**

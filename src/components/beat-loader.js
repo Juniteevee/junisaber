@@ -17,6 +17,7 @@ AFRAME.registerComponent('beat-loader', {
     beatWarmupSpeed: {default: BEAT_WARMUP_SPEED},
     challengeId: {type: 'string'},  // If clicked play.
     difficulty: {type: 'string'},
+    difficultyFiles: {default: {}},
     isPlaying: {default: false},
     menuSelectedChallengeId: {type: 'string'}
   },
@@ -110,22 +111,13 @@ AFRAME.registerComponent('beat-loader', {
   fetchBeats: function () {
     var el = this.el;
 
-    if (this.xhr) { this.xhr.abort(); }
-
-    // Load beats.
-    let url = utils.getS3FileUrl(this.data.menuSelectedChallengeId,
-                                 `${this.data.difficulty}.json`);
-    const xhr = this.xhr = new XMLHttpRequest();
-    el.emit('beatloaderstart');
-    console.log(`[beat-loader] Fetching ${url}...`);
-    xhr.open('GET', url);
-    xhr.addEventListener('load', () => {
-      this.beatData = JSON.parse(xhr.responseText);
-      this.beatDataProcessed = false;
-      this.xhr = null;
-      this.el.sceneEl.emit('beatloaderfinish', null, false);
-    });
-    xhr.send();
+    // Load beats
+    let beat = this.data.difficultyFiles[this.data.difficulty];
+    el.emit('beatloaderstart')
+    this.beatData = beat;
+    this.beatDataProcessed = false;
+    console.log(this.beatData);
+    this.el.sceneEl.emit('beatloaderfinish', null, false);
   },
 
   /**
