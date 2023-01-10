@@ -54,19 +54,20 @@ AFRAME.registerComponent('search', {
         const zipFileReader = new zip.BlobReader(zipBlob);
         const zipReader = new zip.ZipReader(zipFileReader);
         const files = await zipReader.getEntries();
-        const info = _.find(files, {filename: "Info.dat"});
-        //const infoStream = new TransformStream();
-        //const infoPromise = new Response(infoStream.readable).text();
+        console.log(files);
+        const info = _.find(files, {filename: "Info.dat"}) || _.find(files, {filename: "info.dat"});
         const infoBlob = await info.getData(new zip.BlobWriter());
         const infoJson = JSON.parse(await infoBlob.text());
         console.log(infoJson);
         const songFile = _.find(files, {filename: infoJson._songFilename});
         const songBlob = await songFile.getData(new zip.BlobWriter());
         const songUrl = URL.createObjectURL(songBlob);
-        console.log(songUrl);
         const coverFile = _.find(files, {filename: infoJson._coverImageFilename});
-        const coverBlob = await coverFile.getData(new zip.BlobWriter());
-        const coverUrl = URL.createObjectURL(coverBlob);
+        let coverUrl="";
+        if(coverFile){
+          const coverBlob = await coverFile.getData(new zip.BlobWriter());
+          coverUrl = URL.createObjectURL(coverBlob);
+        }
         const difficultyInfo = infoJson._difficultyBeatmapSets[0]._difficultyBeatmaps;
         const difficultyFiles = {};
         difficultyInfo.forEach(async (d) => {

@@ -16,6 +16,7 @@ AFRAME.registerComponent('recenter', {
     });
 
     this.el.addEventListener('recenter', this.recenter);
+    this.el.sceneEl.addEventListener('recenter', this.recenter);
   },
 
   recenter: (function () {
