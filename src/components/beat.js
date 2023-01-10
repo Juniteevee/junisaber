@@ -205,7 +205,7 @@ AFRAME.registerComponent('beat', {
 
       if (position.z > (data.anticipationPosition - BEAT_WARMUP_ROTATION_OFFSET) &&
           this.currentRotationWarmupTime < BEAT_WARMUP_ROTATION_TIME) {
-        const progress = AFRAME.ANIME.easings.easeOutBack(
+        const progress = AFRAME.ANIME.easing('easeOutBack')(
           this.currentRotationWarmupTime / BEAT_WARMUP_ROTATION_TIME);
         el.object3D.rotation.z = this.rotationZStart + (progress * this.rotationZChange);
         this.currentRotationWarmupTime += timeDelta;
