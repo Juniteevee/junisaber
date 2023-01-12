@@ -54,6 +54,16 @@
     proxy-event="event: click; to: a-scene; as: gamemenuexit">
     <a-entity mixin="gameMenuButtonText" text="value: EXIT TO MENU"></a-entity>
   </a-entity>
+  
+  <a-entity
+    id="recenterButton"
+    mixin="gameMenuButton"
+    bind__visible="!isVictory"
+    bind-toggle__raycastable="isPaused || isGameOver"
+    position="0 -1.05 0"
+    proxy-event="event: click; to: a-scene; as: recenter-camera">
+    <a-entity mixin="gameMenuButtonText" text="value: Recenter Camera"></a-entity>
+  </a-entity>
 
   <!-- Song info. -->
   <a-entity id="gameMenuSongInfoContainer" position="0 -1.10421 0.15473" rotation="-20 0 0">

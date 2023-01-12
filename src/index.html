@@ -133,7 +133,7 @@
         sub-object="from: #cursorLaser; name: glow"></a-mixin>
 
       <!-- Player. -->
-      <a-entity id="cameraRig">
+      <a-entity id="cameraRig" recenter-camera>
         <a-entity id="camera" position="0 1.6 0.5" camera look-controls wasd-controls>
           <a-entity
             id="cameraCollider"
@@ -144,9 +144,8 @@
             proxy-event__wallhitend="event: hitend; to: a-scene; as: wallhitend"
             visible="false"></a-entity>
         </a-entity>
-      </a-entity>
-
-      <a-entity
+        
+        <a-entity
         id="controllerRig"
         proxy-event="event: recentered; to: #cameraRig; captureBubbles: true; as: recenter">
         {% macro saber (hand, otherHand, bladeColor, beamColor) %}
@@ -236,6 +235,7 @@
 
         {{ saber('right', 'left', '#256c43', 'cyan') }}
         {{ saber('left', 'right', '#850e3e', 'pink') }}
+      </a-entity>
       </a-entity>
 
       <a-entity

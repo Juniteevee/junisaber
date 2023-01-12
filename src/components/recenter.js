@@ -26,6 +26,7 @@ AFRAME.registerComponent('recenter', {
     var translationMatrix = new THREE.Matrix4();
 
     return function () {
+      console.log("recenter called");
       const el = this.el;
 
       if (!this.data.enabled) { return; }

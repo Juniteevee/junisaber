@@ -287,23 +287,6 @@
   proxy-event__accept="event: superkeyboardinput; to: a-scene; as: keyboardclose">
 </a-entity>
 
-<a-entity id="genreButtons" position="-0.55 0.2 -1.9">
-  <a-entity id="genreButton"
-    mixin="bigMenuButton"
-    bind-toggle__raycastable="menuActive && !genreMenuOpen && !isSearching && !genre"
-    bind__visible="menuActive && !genreMenuOpen && !isSearching && !genre"
-    proxy-event="event: click; to: a-scene; as: genremenuopen">
-    <a-entity mixin="font" text="align: center; color: #FFF; wrapCount: 20; value: BROWSE GENRES" position="0 -0.07 0.01"></a-entity>
-  </a-entity>
-
-  <a-entity id="clearGenreButton"
-    mixin="bigMenuButton"
-    bind-toggle__raycastable="menuActive && !!genre"
-    bind__visible="menuActive && !!genre"
-    proxy-event="event: click; to: a-scene; as: searchclear">
-    <a-entity mixin="font" text="align: center; color: #FFF; wrapCount: 20; value: CLEAR GENRE" position="0 -0.07 0.01"></a-entity>
-  </a-entity>
-</a-entity>
 
 <a-entity
   id="backButton"
@@ -315,7 +298,7 @@
   <a-entity mixin="font" text="align: center; color: #FFF; wrapCount: 20; value: BACK" position="0 -0.07 0.01"></a-entity>
 </a-entity>
 
-<a-entity id="searchButtons" position="0.55 0.2 -1.9">
+<a-entity id="searchButtons" position="0 0.2 -1.9">
   <a-entity id="searchButton"
     mixin="bigMenuButton"
     bind-toggle__raycastable="menuActive && !genreMenuOpen && !isSearching && !search.query"
